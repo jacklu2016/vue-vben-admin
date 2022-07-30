@@ -2,9 +2,12 @@ import { defHttp } from '/@/utils/http/axios';
 import { LoginParams, LoginResultModel, GetUserInfoModel } from './model/userModel';
 
 import { ErrorMessageMode } from '/#/axios';
+import axios from 'axios'
+import qs from 'qs'
 
 enum Api {
-  Login = '/login',
+  //Login = '/login',
+  Login = '/authorization-server/oauth/token?scope=read&grant_type=password',
   Logout = '/logout',
   GetUserInfo = '/getUserInfo',
   GetPermCode = '/getPermCode',
@@ -14,7 +17,7 @@ enum Api {
 /**
  * @description: user login api
  */
-export function loginApi(params: LoginParams, mode: ErrorMessageMode = 'modal') {
+/*export function loginApi(params: LoginParams, mode: ErrorMessageMode = 'modal') {
   return defHttp.post<LoginResultModel>(
     {
       url: Api.Login,
@@ -24,7 +27,42 @@ export function loginApi(params: LoginParams, mode: ErrorMessageMode = 'modal') 
       errorMessageMode: mode,
     },
   );
+}*/
+
+export function loginApi(params: LoginParams, mode: ErrorMessageMode = 'modal') {
+  /*axios.post(
+    Api.Login,
+    qs.stringify({username: 'zhoutaoo',
+                  password:'password',
+                  }), // 传输时，需要字符化，并且要以import qs from 'qs';
+    {headers: {'Content-Type': 'application/x-www-form-urlencoded', 
+                'Authorization': 'Basic dGVzdF9jbGllbnQ6dGVzdF9zZWNyZXQ='    
+  }}
+  )
+  .then(function (response: any) {
+    console.log(response);
+    return response;
+  })
+  .catch(function (error: any) {
+    console.log(error);
+  });*/
+
+  //return null;
+  defHttp.setHeader({'Content-Type': 'application/x-www-form-urlencoded', 
+    'Authorization': 'Basic dGVzdF9jbGllbnQ6dGVzdF9zZWNyZXQ='    
+  })
+  
+  return defHttp.post<LoginResultModel>(
+    {
+      url: Api.Login,
+      params
+    },
+    {
+      errorMessageMode: mode,
+    },
+  );
 }
+
 
 /**
  * @description: getUserInfo
