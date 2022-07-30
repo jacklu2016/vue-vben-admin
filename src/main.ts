@@ -56,6 +56,8 @@ async function bootstrap() {
   // await router.isReady();
 
   app.mount('#app');
+
+  console.log(import.meta.env.VITE_BASE_URL);
 }
 
 bootstrap();

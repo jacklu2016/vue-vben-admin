@@ -91,7 +91,8 @@ export const useUserStore = defineStore({
       try {
         const { goHome = true, mode, ...loginParams } = params;
         const data = await loginApi(loginParams, mode);
-        const { token } = data;
+        console.log(data);
+        const token = data.access_token;
 
         // save token
         this.setToken(token);
@@ -103,7 +104,23 @@ export const useUserStore = defineStore({
     async afterLoginAction(goHome?: boolean): Promise<GetUserInfoModel | null> {
       if (!this.getToken) return null;
       // get user info
-      const userInfo = await this.getUserInfoAction();
+      //const userInfo = await this.getUserInfoAction();
+      const userInfo = {
+        userId: '1',
+        username: 'vben',
+        realName: 'Vben Admin',
+        avatar: 'https://q1.qlogo.cn/g?b=qq&nk=190848757&s=640',
+        desc: 'manager',
+        password: '123456',
+        token: 'fakeToken1',
+        homePath: '/dashboard/analysis',
+        roles: [
+          {
+            roleName: 'Super Admin',
+            value: 'super',
+          },
+        ],
+      };
 
       const sessionTimeout = this.sessionTimeout;
       if (sessionTimeout) {

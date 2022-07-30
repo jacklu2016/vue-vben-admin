@@ -30,7 +30,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
   const { VITE_PORT, VITE_PUBLIC_PATH, VITE_PROXY, VITE_DROP_CONSOLE } = viteEnv;
 
   const isBuild = command === 'build';
-
+  console.log('vite user config init');
   return {
     base: VITE_PUBLIC_PATH,
     root,
@@ -53,7 +53,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
       ],
     },
     server: {
-      https: true,
+      https: false,
       // Listening on all local IPs
       host: true,
       port: VITE_PORT,

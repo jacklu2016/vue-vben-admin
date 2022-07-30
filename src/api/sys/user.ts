@@ -2,8 +2,8 @@ import { defHttp } from '/@/utils/http/axios';
 import { LoginParams, LoginResultModel, GetUserInfoModel } from './model/userModel';
 
 import { ErrorMessageMode } from '/#/axios';
-import axios from 'axios'
-import qs from 'qs'
+//import axios from 'axios'
+//import qs from 'qs'
 
 enum Api {
   //Login = '/login',
@@ -48,21 +48,21 @@ export function loginApi(params: LoginParams, mode: ErrorMessageMode = 'modal') 
   });*/
 
   //return null;
-  defHttp.setHeader({'Content-Type': 'application/x-www-form-urlencoded', 
-    'Authorization': 'Basic dGVzdF9jbGllbnQ6dGVzdF9zZWNyZXQ='    
-  })
-  
+  defHttp.setHeader({
+    'Content-Type': 'application/x-www-form-urlencoded',
+    Authorization: 'Basic dGVzdF9jbGllbnQ6dGVzdF9zZWNyZXQ=',
+  });
+
   return defHttp.post<LoginResultModel>(
     {
-      url: Api.Login,
-      params
+      url: Api.Login + '&username=' + params.username + '&password=' + params.password,
+      params,
     },
     {
       errorMessageMode: mode,
     },
   );
 }
-
 
 /**
  * @description: getUserInfo
