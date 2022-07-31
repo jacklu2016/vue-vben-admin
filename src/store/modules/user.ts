@@ -39,6 +39,13 @@ interface UserState {
   lastUpdateTime: number;
 }
 
+function printObj(foo: object) {
+  for (const key in foo) {
+    console.log(key + ':' + (foo as any)[key]); // 报错消失
+    // do something
+  }
+}
+
 export const useUserStore = defineStore({
   id: 'app-user',
   state: (): UserState => ({
@@ -106,18 +113,21 @@ export const useUserStore = defineStore({
       try {
         const { goHome = true, mode, ...loginParams } = params;
         const data = await loginApi(loginParams, mode);
-        console.log(data);
+        console.log('login response data:');
+        printObj(data);
         const token = data.access_token;
-
-        // save token
-        this.setToken(token);
+        //仅仅设置username, 在下方getuserinfo方法中能获取username
         this.setUserInfo({
           username: data.organization,
           userId: '',
           realName: '',
           avatar: '',
           roles: [],
+          name: data.name,
         });
+        // save token
+        this.setToken(token);
+
         return this.afterLoginAction(goHome);
       } catch (error) {
         return Promise.reject(error);
@@ -146,6 +156,14 @@ export const useUserStore = defineStore({
         ],
       };*/
       //userInfo.homePath = 'https://q1.qlogo.cn/g?b=qq&nk=190848757&s=640';
+      /*this.setUserInfo({
+        username: data.organization,
+        userId: '',
+        realName: '',
+        avatar: '',
+        roles: [],
+        name: data.name,
+      });*/
 
       const sessionTimeout = this.sessionTimeout;
       if (sessionTimeout) {
@@ -176,7 +194,16 @@ export const useUserStore = defineStore({
         userInfo.roles = [];
         this.setRoleList([]);
       }
-      this.setUserInfo(userInfo);
+      this.setUserInfo({
+        username: userInfo.data['username'],
+        userId: userInfo.data['id'],
+        realName: userInfo.data['name'],
+        avatar: userInfo.data['avatar'],
+        roles: userInfo.data['roleIds'],
+        name: userInfo.data['name'],
+      });
+      console.debug('login userinfo:');
+      printObj(this.getUserInfo);
       return userInfo;
     },
     /**

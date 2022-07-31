@@ -20,6 +20,7 @@ export interface LoginResultModel {
   role: RoleInfo;
   access_token: string;
   organization: string;
+  name: string;
 }
 
 /**
@@ -37,4 +38,12 @@ export interface GetUserInfoModel {
   avatar: string;
   // 介绍
   desc?: string;
+
+  name: string;
+
+  roleIds: [];
+
+  id: string | number;
+
+  data: {};
 }

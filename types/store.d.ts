@@ -38,6 +38,7 @@ export interface UserInfo {
   desc?: string;
   homePath?: string;
   roles: RoleInfo[];
+  name: string;
 }
 
 export interface BeforeMiniState {
