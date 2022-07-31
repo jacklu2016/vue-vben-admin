@@ -9,7 +9,8 @@ enum Api {
   //Login = '/login',
   Login = '/authorization-server/oauth/token?scope=read&grant_type=password',
   Logout = '/logout',
-  GetUserInfo = '/getUserInfo',
+  //GetUserInfo = '/getUserInfo',
+  GetUserInfo = '/organization/user',
   GetPermCode = '/getPermCode',
   TestRetry = '/testRetry',
 }
@@ -67,8 +68,11 @@ export function loginApi(params: LoginParams, mode: ErrorMessageMode = 'modal') 
 /**
  * @description: getUserInfo
  */
-export function getUserInfo() {
-  return defHttp.get<GetUserInfoModel>({ url: Api.GetUserInfo }, { errorMessageMode: 'none' });
+export function getUserInfo(username: string) {
+  return defHttp.get<GetUserInfoModel>(
+    { url: Api.GetUserInfo + '?uniqueId=' + username },
+    { errorMessageMode: 'none' },
+  );
 }
 
 export function getPermCode() {

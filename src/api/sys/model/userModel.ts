@@ -19,6 +19,7 @@ export interface LoginResultModel {
   token: string;
   role: RoleInfo;
   access_token: string;
+  organization: string;
 }
 
 /**

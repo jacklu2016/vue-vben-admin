@@ -17,6 +17,20 @@ import { PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic';
 import { isArray } from '/@/utils/is';
 import { h } from 'vue';
 
+function setCookie(c_name, value, expiredays) {
+  const exdate = new Date();
+  exdate.setDate(exdate.getDate() + expiredays);
+  document.cookie =
+    c_name + '=' + escape(value) + (expiredays == null ? '' : ';expires=' + exdate.toUTCString());
+}
+
+function getCookie(name) {
+  const arr = new RegExp('(^| )' + name + '=([^;]*)(;|$)');
+  const reg = new RegExp('(^| )' + name + '=([^;]*)(;|$)');
+  if (document.cookie.match(reg)) return arr[2];
+  else return null;
+}
+
 interface UserState {
   userInfo: Nullable<UserInfo>;
   token?: string;
@@ -59,6 +73,7 @@ export const useUserStore = defineStore({
   actions: {
     setToken(info: string | undefined) {
       this.token = info ? info : ''; // for null or undefined value
+      setCookie('Admin-Token', this.token, 100);
       setAuthCache(TOKEN_KEY, info);
     },
     setRoleList(roleList: RoleEnum[]) {
@@ -96,6 +111,13 @@ export const useUserStore = defineStore({
 
         // save token
         this.setToken(token);
+        this.setUserInfo({
+          username: data.organization,
+          userId: '',
+          realName: '',
+          avatar: '',
+          roles: [],
+        });
         return this.afterLoginAction(goHome);
       } catch (error) {
         return Promise.reject(error);
@@ -104,8 +126,10 @@ export const useUserStore = defineStore({
     async afterLoginAction(goHome?: boolean): Promise<GetUserInfoModel | null> {
       if (!this.getToken) return null;
       // get user info
-      //const userInfo = await this.getUserInfoAction();
-      const userInfo = {
+      console.debug('admin-token cookie: {} ' + getCookie('Admin-cookie'));
+      setCookie('Admin-Token', this.token, 100);
+      const userInfo = await this.getUserInfoAction();
+      /*const userInfo = {
         userId: '1',
         username: 'vben',
         realName: 'Vben Admin',
@@ -120,7 +144,8 @@ export const useUserStore = defineStore({
             value: 'super',
           },
         ],
-      };
+      };*/
+      //userInfo.homePath = 'https://q1.qlogo.cn/g?b=qq&nk=190848757&s=640';
 
       const sessionTimeout = this.sessionTimeout;
       if (sessionTimeout) {
@@ -141,7 +166,8 @@ export const useUserStore = defineStore({
     },
     async getUserInfoAction(): Promise<UserInfo | null> {
       if (!this.getToken) return null;
-      const userInfo = await getUserInfo();
+      console.debug('user_info_key:' + USER_INFO_KEY);
+      const userInfo = await getUserInfo(this.getUserInfo.username);
       const { roles = [] } = userInfo;
       if (isArray(roles)) {
         const roleList = roles.map((item) => item.value) as RoleEnum[];
