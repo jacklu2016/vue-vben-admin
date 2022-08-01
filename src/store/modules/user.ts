@@ -6,7 +6,7 @@ import { RoleEnum } from '/@/enums/roleEnum';
 import { PageEnum } from '/@/enums/pageEnum';
 import { ROLES_KEY, TOKEN_KEY, USER_INFO_KEY } from '/@/enums/cacheEnum';
 import { getAuthCache, setAuthCache } from '/@/utils/auth';
-import { GetUserInfoModel, LoginParams } from '/@/api/sys/model/userModel';
+import { LoginParams } from '/@/api/sys/model/userModel';
 import { doLogout, getUserInfo, loginApi } from '/@/api/sys/user';
 import { useI18n } from '/@/hooks/web/useI18n';
 import { useMessage } from '/@/hooks/web/useMessage';
@@ -109,12 +109,11 @@ export const useUserStore = defineStore({
         goHome?: boolean;
         mode?: ErrorMessageMode;
       },
-    ): Promise<GetUserInfoModel | null> {
+    ): Promise<UserInfo | null> {
       try {
         const { goHome = true, mode, ...loginParams } = params;
         const data = await loginApi(loginParams, mode);
-        console.log('login response data:');
-        printObj(data);
+
         const token = data.access_token;
         //仅仅设置username, 在下方getuserinfo方法中能获取username
         this.setUserInfo({
@@ -128,12 +127,14 @@ export const useUserStore = defineStore({
         // save token
         this.setToken(token);
 
+        console.log('login return user info :');
+        printObj(this.getUserInfo);
         return this.afterLoginAction(goHome);
       } catch (error) {
         return Promise.reject(error);
       }
     },
-    async afterLoginAction(goHome?: boolean): Promise<GetUserInfoModel | null> {
+    async afterLoginAction(goHome?: boolean): Promise<UserInfo | null> {
       if (!this.getToken) return null;
       // get user info
       console.debug('admin-token cookie: {} ' + getCookie('Admin-cookie'));
@@ -186,25 +187,31 @@ export const useUserStore = defineStore({
       if (!this.getToken) return null;
       console.debug('user_info_key:' + USER_INFO_KEY);
       const userInfo = await getUserInfo(this.getUserInfo.username);
-      const { roles = [] } = userInfo;
-      if (isArray(roles)) {
-        const roleList = roles.map((item) => item.value) as RoleEnum[];
+      console.log('get userinfo:');
+      printObj(this.getUserInfo);
+      const { roleIds = [] } = userInfo;
+      if (isArray(roleIds)) {
+        const roleList = new Array<RoleEnum>();
+        for (let i = 0; i < roleIds.length; i++) {
+          roleList.push(roleIds[i] as RoleEnum);
+        }
+        //const roleList = roles.map((item) => item.value) as RoleEnum[];
         this.setRoleList(roleList);
       } else {
-        userInfo.roles = [];
+        userInfo.roleIds = [];
         this.setRoleList([]);
       }
       this.setUserInfo({
-        username: userInfo.data['username'],
-        userId: userInfo.data['id'],
-        realName: userInfo.data['name'],
-        avatar: userInfo.data['avatar'],
-        roles: userInfo.data['roleIds'],
-        name: userInfo.data['name'],
+        username: userInfo.username,
+        userId: userInfo.id,
+        realName: userInfo.name,
+        avatar: '',
+        roles: userInfo.roleIds,
+        name: userInfo.name,
       });
-      console.debug('login userinfo:');
+      console.log('get userinfo manual setting:');
       printObj(this.getUserInfo);
-      return userInfo;
+      return this.getUserInfo;
     },
     /**
      * @description: logout
