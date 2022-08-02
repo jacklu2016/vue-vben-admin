@@ -1,16 +1,17 @@
 import { getAllRoleList, isAccountExist } from '/@/api/demo/system';
 import { BasicColumn } from '/@/components/Table';
 import { FormSchema } from '/@/components/Table';
+import moment from 'moment';
 
 export const columns: BasicColumn[] = [
   {
     title: '用户名',
-    dataIndex: 'account',
+    dataIndex: 'username',
     width: 120,
   },
   {
     title: '昵称',
-    dataIndex: 'nickname',
+    dataIndex: 'name',
     width: 120,
   },
   {
@@ -20,29 +21,33 @@ export const columns: BasicColumn[] = [
   },
   {
     title: '创建时间',
-    dataIndex: 'createTime',
+    dataIndex: 'createdTime',
     width: 180,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    customRender: ({ text }) => {
+      return text ? moment(text).format('YYYY-MM-DD HH:mm:ss') : '';
+    },
   },
   {
     title: '角色',
-    dataIndex: 'role',
+    dataIndex: 'roleIds',
     width: 200,
   },
   {
     title: '备注',
-    dataIndex: 'remark',
+    dataIndex: 'description',
   },
 ];
 
 export const searchFormSchema: FormSchema[] = [
   {
-    field: 'account',
+    field: 'username',
     label: '用户名',
     component: 'Input',
     colProps: { span: 8 },
   },
   {
-    field: 'nickname',
+    field: 'name',
     label: '昵称',
     component: 'Input',
     colProps: { span: 8 },
@@ -51,7 +56,7 @@ export const searchFormSchema: FormSchema[] = [
 
 export const accountFormSchema: FormSchema[] = [
   {
-    field: 'account',
+    field: 'username',
     label: '用户名',
     component: 'Input',
     helpMessage: ['本字段演示异步验证', '不能输入带有admin的用户名'],
@@ -74,7 +79,7 @@ export const accountFormSchema: FormSchema[] = [
     ],
   },
   {
-    field: 'pwd',
+    field: 'password',
     label: '密码',
     component: 'InputPassword',
     required: true,
@@ -82,7 +87,7 @@ export const accountFormSchema: FormSchema[] = [
   },
   {
     label: '角色',
-    field: 'role',
+    field: 'roleIds',
     component: 'ApiSelect',
     componentProps: {
       api: getAllRoleList,
@@ -94,7 +99,8 @@ export const accountFormSchema: FormSchema[] = [
   {
     field: 'dept',
     label: '所属部门',
-    component: 'TreeSelect',
+    //component: 'TreeSelect',
+    component: 'Input',
     componentProps: {
       fieldNames: {
         label: 'deptName',
@@ -106,7 +112,7 @@ export const accountFormSchema: FormSchema[] = [
     required: true,
   },
   {
-    field: 'nickname',
+    field: 'name',
     label: '昵称',
     component: 'Input',
     required: true,
@@ -121,7 +127,7 @@ export const accountFormSchema: FormSchema[] = [
 
   {
     label: '备注',
-    field: 'remark',
+    field: 'description',
     component: 'InputTextArea',
   },
 ];

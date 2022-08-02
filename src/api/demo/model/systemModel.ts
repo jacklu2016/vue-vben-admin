@@ -24,13 +24,13 @@ export type MenuParams = {
 
 export interface AccountListItem {
   id: string;
-  account: string;
+  username: string;
   email: string;
-  nickname: string;
-  role: number;
-  createTime: string;
-  remark: string;
-  status: number;
+  name: string;
+  roleIds: string[];
+  createdTime: string;
+  description: string;
+  deleted: string;
 }
 
 export interface DeptListItem {
