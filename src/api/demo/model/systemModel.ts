@@ -53,8 +53,8 @@ export interface MenuListItem {
 
 export interface RoleListItem {
   id: string;
-  roleName: string;
-  roleValue: string;
+  name: string;
+  code: string;
   status: number;
   orderNo: string;
   createTime: string;

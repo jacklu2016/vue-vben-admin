@@ -68,11 +68,19 @@ export const accountFormSchema: FormSchema[] = [
       {
         validator(_, value) {
           return new Promise((resolve, reject) => {
-            isAccountExist(value)
-              .then(() => resolve())
-              .catch((err) => {
-                reject(err.message || '验证失败');
-              });
+            console.log('user form value:' + value);
+            resolve();
+            // isAccountExist(value)
+            //   //.then((result) => resolve())
+            //   .then((result) => {
+            //     if (result.id != null || result.id != undefined) {
+            //       reject('用户名已经存在');
+            //     }
+            //     return resolve();
+            //   })
+            //   .catch((err) => {
+            //     reject(err.message || '验证失败');
+            //   });
           });
         },
       },
@@ -86,15 +94,22 @@ export const accountFormSchema: FormSchema[] = [
     ifShow: false,
   },
   {
+    field: 'id',
+    label: 'id',
+    component: 'Input',
+    ifShow: false,
+  },
+  {
     label: '角色',
     field: 'roleIds',
     component: 'ApiSelect',
     componentProps: {
       api: getAllRoleList,
-      labelField: 'roleName',
-      valueField: 'roleValue',
+      labelField: 'name',
+      valueField: 'code',
     },
     required: true,
+    itemProps: { validateTrigger: 'blur' },
   },
   {
     field: 'dept',
@@ -117,7 +132,12 @@ export const accountFormSchema: FormSchema[] = [
     component: 'Input',
     required: true,
   },
-
+  {
+    field: 'mobile',
+    label: '手机号',
+    component: 'Input',
+    required: true,
+  },
   {
     label: '邮箱',
     field: 'email',

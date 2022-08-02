@@ -41,7 +41,7 @@
   import { defineComponent, reactive } from 'vue';
 
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
-  import { getAccountList } from '/@/api/demo/system';
+  import { getAccountList, deleteUser } from '/@/api/demo/system';
   import { PageWrapper } from '/@/components/Page';
   import DeptTree from './DeptTree.vue';
 
@@ -50,6 +50,7 @@
 
   import { columns, searchFormSchema } from './account.data';
   import { useGo } from '/@/hooks/web/usePage';
+  import { useMessage } from '/@/hooks/web/useMessage';
 
   export default defineComponent({
     name: 'AccountManagement',
@@ -58,6 +59,7 @@
       const go = useGo();
       const [registerModal, { openModal }] = useModal();
       const searchInfo = reactive<Recordable>({});
+      const { createSuccessModal, createErrorModal } = useMessage();
       const [registerTable, { reload, updateTableDataRecord }] = useTable({
         title: '账号列表',
         api: getAccountList,
@@ -99,6 +101,21 @@
 
       function handleDelete(record: Recordable) {
         console.log(record);
+        deleteUser(record.id).then((result) => {
+          console.log(result);
+          if (result === true) {
+            createSuccessModal({
+              title: '删除成功',
+              content: '用户：' + record.username + '删除成功！',
+            });
+            reload();
+          } else {
+            createErrorModal({
+              title: '删除失败',
+              content: result.mesg,
+            });
+          }
+        });
       }
 
       function handleSuccess({ isUpdate, values }) {
