@@ -29,8 +29,8 @@ export const columns: BasicColumn[] = [
     },
   },
   {
-    title: '角色',
-    dataIndex: 'roleIds',
+    title: '电话',
+    dataIndex: 'mobile',
     width: 200,
   },
   {
@@ -68,19 +68,19 @@ export const accountFormSchema: FormSchema[] = [
       {
         validator(_, value) {
           return new Promise((resolve, reject) => {
-            console.log('user form value:' + value);
-            resolve();
-            // isAccountExist(value)
-            //   //.then((result) => resolve())
-            //   .then((result) => {
-            //     if (result.id != null || result.id != undefined) {
-            //       reject('用户名已经存在');
-            //     }
-            //     return resolve();
-            //   })
-            //   .catch((err) => {
-            //     reject(err.message || '验证失败');
-            //   });
+            //console.log('user form value:' + value);
+
+            isAccountExist(value)
+              //.then((result) => resolve())
+              .then((result) => {
+                if (result.id != null || result.id != undefined) {
+                  reject('用户名已经存在');
+                }
+                return resolve();
+              })
+              .catch((err) => {
+                reject(err.message || '验证失败');
+              });
           });
         },
       },

@@ -127,6 +127,7 @@
         } else {
           reload();
         }
+        //reload();
       }
 
       function handleSelect(deptId = '') {
