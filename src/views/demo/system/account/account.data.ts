@@ -106,7 +106,7 @@ export const accountFormSchema: FormSchema[] = [
     componentProps: {
       api: getAllRoleList,
       labelField: 'name',
-      valueField: 'code',
+      valueField: 'id',
     },
     required: true,
     itemProps: { validateTrigger: 'blur' },
