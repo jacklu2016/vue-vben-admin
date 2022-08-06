@@ -11,7 +11,7 @@ services:
     networks:
       - sc-net
     ports:
-      - 8080:9090
+      - 9090:9090
 
 networks:
   sc-net:
