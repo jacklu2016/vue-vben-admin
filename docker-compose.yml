@@ -7,7 +7,7 @@ services:
     volumes:
       - ./nginx/logs:/var/log/nginx
       - ./nginx/conf:/etc/nginx/conf.d
-      - ./dist:/usr/share/nginx/html/vue-vben-admin
+      - ./dist:/usr/share/nginx/html/admin
     networks:
       - sc-net
     ports:
