@@ -50,7 +50,7 @@ export function loginApi(params: LoginParams, mode: ErrorMessageMode = 'modal') 
 
   //return null;
   defHttp.setHeader({
-    'Content-Type': 'application/x-www-form-urlencoded',
+    //'Content-Type': 'application/x-www-form-urlencoded',
     Authorization: 'Basic dGVzdF9jbGllbnQ6dGVzdF9zZWNyZXQ=',
   });
 
