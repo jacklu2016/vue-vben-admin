@@ -1,0 +1,74 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  finalizers:
+    - kubernetes.io/pv-protection
+  labels:
+    pv: pv-nginx-logs
+  managedFields:
+    - apiVersion: v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:labels:
+            .: {}
+            f:pv-nginx-logs: {}
+        f:spec:
+          f:accessModes: {}
+          f:capacity:
+            .: {}
+            f:storage: {}
+          f:mountOptions: {}
+          f:nfs:
+            .: {}
+            f:path: {}
+            f:server: {}
+          f:persistentVolumeReclaimPolicy: {}
+          f:volumeMode: {}
+      manager: agent
+      operation: Update
+      time: '2022-08-09T05:19:36Z'
+    - apiVersion: v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:status:
+          f:phase: {}
+      manager: kube-controller-manager
+      operation: Update
+      time: '2022-08-09T05:19:36Z'
+  name: pv-nginx-logs
+  resourceVersion: '848073'
+  uid: 2e5ac64b-e70d-4cd4-86cf-dcd898ee0913
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 10Gi
+  mountOptions:
+    - nolock
+  nfs:
+    path: /var/services/homes/bigdata/k8s/nginx/logs
+    server: 10.4.6.32
+  persistentVolumeReclaimPolicy: Retain
+  volumeMode: Filesystem
+status:
+  phase: Available
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    io.kompose.service: nginx-claim0
+  name: nginx-claim0
+  namespace: sc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+  selector:
+    matchLabels:
+      pv: pv-nginx-logs
+status: {}
